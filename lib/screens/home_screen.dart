@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../components/custom_button.dart';
 import 'setup_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -40,28 +41,16 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 18),
-                        textStyle: TextStyle(fontSize: 18),
-                        backgroundColor: Colors.deepOrange,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  CustomButton(
+                    text: 'Set Up Game',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SetupScreen(),
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SetupScreen(),
-                          ),
-                        );
-                      },
-                      child: Text('Set Up Game'),
-                    ),
+                      );
+                    },
                   ),
                   SizedBox(height: 40),
                 ],
