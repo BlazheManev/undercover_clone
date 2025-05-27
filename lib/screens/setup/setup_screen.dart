@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:undercover_clone/screens/setup/role_screen.dart';
+import 'package:Undercover/screens/setup/role_screen.dart';
 import '../../../components/custom_button.dart';
 import '../../../components/player_name_dialog.dart';
 

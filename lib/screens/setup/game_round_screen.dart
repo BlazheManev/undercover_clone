@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:undercover_clone/screens/setup/game_result_screen.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:Undercover/screens/setup/game_result_screen.dart';
 import '../../../models/player.dart';
 import '../../../components/custom_button.dart';
 
@@ -19,12 +20,14 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   int round = 1;
   bool showVoting = false;
 
+  late final AudioPlayer _audioPlayer;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
+    _audioPlayer = AudioPlayer();
     _pulseController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
@@ -38,6 +41,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   @override
   void dispose() {
     _pulseController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -46,6 +50,10 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   int get remainingUndercovers =>
       alivePlayers.where((p) => p.role == PlayerRole.Undercover).length;
+
+  void _playSound(String fileName) {
+    _audioPlayer.play(AssetSource('audio/$fileName'));
+  }
 
   void _eliminatePlayer() {
     if (_selectedName == null) return;
@@ -62,6 +70,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
       showVoting = false;
     });
 
+    _playSound('eliminate.mp3');
     Future.microtask(() => _checkWinCondition());
   }
 
@@ -71,8 +80,10 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     final civilians = alive.where((p) => p.role == PlayerRole.Civilian);
 
     if (undercovers.isEmpty) {
+      _playSound('win_civilians.mp3');
       _endGame(false);
     } else if (civilians.isEmpty || alive.length <= 2) {
+      _playSound('win_undercover.mp3');
       _endGame(true);
     }
   }
@@ -206,17 +217,18 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          if (!showVoting) ...[
-                            SizedBox(height: 8),
-                            Text(
-                              'Each player describes their secret word in the given order.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white70,
+                          if (!showVoting)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Each player describes their secret word in the given order.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ),
-                          ],
                         ],
                       ),
                     ),
@@ -266,6 +278,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                                   showVoting = true;
                                 });
                                 _pulseController.stop();
+                                _playSound('start_voting.mp3');
                               },
                             ),
                           ),
