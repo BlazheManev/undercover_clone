@@ -114,6 +114,6 @@ To run the test pipeline manually:
 
 The workflow installs dependencies and runs `flutter test` on Ubuntu without needing an emulator.
 
-## 🚀 Get Started & Enjoy!
+## 🪄 Get Started & Enjoy!
 
 Build, play, and find the undercover! 🕵️‍♂️
