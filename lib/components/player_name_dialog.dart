@@ -34,8 +34,9 @@ class _PlayerNameDialogState extends State<PlayerNameDialog> {
   void _submit() {
     final names = _controllers.map((c) => c.text.trim()).toList();
     final hasEmpty = names.any((name) => name.isEmpty);
+    final hasDuplicates = names.length != names.toSet().length;
 
-    if (hasEmpty) {
+    if (hasEmpty || hasDuplicates) {
       setState(() {
         _showValidation = true;
       });
@@ -57,10 +58,7 @@ class _PlayerNameDialogState extends State<PlayerNameDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,24 +78,49 @@ class _PlayerNameDialogState extends State<PlayerNameDialog> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: List.generate(widget.totalPlayers, (index) {
-                    final isEmpty =
-                        _controllers[index].text.trim().isEmpty &&
-                        _showValidation;
+                    final currentName = _controllers[index].text.trim();
+                    final allNames = _controllers.map((c) => c.text.trim()).toList();
+
+                    final isEmpty = _showValidation && currentName.isEmpty;
+                    final isDuplicate = _showValidation &&
+                        allNames.where((name) => name == currentName).length > 1;
+
+                    String? errorText;
+                    if (isEmpty) {
+                      errorText = 'Name cannot be empty';
+                    } else if (isDuplicate) {
+                      errorText = 'Name is duplicated';
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6.0),
-                      child: TextField(
-                        controller: _controllers[index],
-                        decoration: InputDecoration(
-                          hintText: 'Player ${index + 1}',
-                          filled: true,
-                          fillColor: isEmpty
-                              ? Colors.red[50]
-                              : Colors.grey[200],
-                          border: OutlineInputBorder(),
-                          suffixIcon: isEmpty
-                              ? Icon(Icons.error_outline, color: Colors.red)
-                              : null,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (errorText != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: Text(
+                                errorText,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          TextField(
+                            controller: _controllers[index],
+                            decoration: InputDecoration(
+                              hintText: 'Player ${index + 1}',
+                              filled: true,
+                              fillColor: errorText != null
+                                  ? Colors.red[50]
+                                  : Colors.grey[200],
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   }),
