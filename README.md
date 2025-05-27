@@ -78,8 +78,44 @@ TODO
 - Round-based gameplay
 - Voting system with animations and sounds
 - Game over logic and restart
+- Built-in testing support (unit + widget)
+- Automated test runner on push/PR via GitHub Actions
+- Manual CI/CD pipeline trigger for test runs
 
 ---
+
+## ✅ Running Tests
+
+To run all tests locally:
+
+   ```bash
+    flutter test
+   ```
+To run a specific file:
+ ```bash
+    flutter test test/my_test_file.dart
+   ```
+Tests are written using flutter_test, mockito, and test for mocking logic and audio behavior.
+
+### ⚙️ New Section: `## 🚀 CI/CD with GitHub Actions`
+
+```markdown
+## 🚀 CI/CD with GitHub Actions
+
+All tests are automatically executed on:
+- ✅ Pushes to `main`
+- ✅ Pull requests to `main`
+- ✅ Manual trigger from GitHub UI
+
+### 🔧 Manually Trigger the Pipeline
+
+To run the test pipeline manually:
+
+1. Go to **Actions** tab on GitHub
+2. Select **Run Flutter Tests**
+3. Click **Run workflow** ➡️ Confirm
+
+The workflow installs dependencies and runs `flutter test` on Ubuntu without needing an emulator.
 
 ## 🚀 Get Started & Enjoy!
 
