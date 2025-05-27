@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'dart:async'; // Required for Timer
+import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import '../game/game_round_screen.dart';
 import '../../../models/player.dart';
+import '../../../components/player_avatar.dart'; // <-- Import the avatar component
 
 class RoleScreen extends StatefulWidget {
   final List<String> playerNames;
@@ -133,6 +134,8 @@ class _RoleScreenState extends State<RoleScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              PlayerAvatar(name: current['name'] ?? '', radius: 32),
+              SizedBox(height: 12),
               Text(
                 current['name'] ?? '',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

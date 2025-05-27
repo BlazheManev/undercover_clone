@@ -1,3 +1,4 @@
+import 'package:Undercover/components/player_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:Undercover/screens/game/game_result_screen.dart';
@@ -236,13 +237,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                       child: ListView(
                         children: alivePlayers.map((p) {
                           return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.deepPurple,
-                              child: Text(
-                                p.name.substring(0, 1).toUpperCase(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
+                            leading: PlayerAvatar(name: p.name),
                             title: Text(
                               p.name,
                               style: TextStyle(color: Colors.white),

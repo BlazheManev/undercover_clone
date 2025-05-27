@@ -8,7 +8,7 @@ A fun party game built with Flutter. Players must figure out who the undercover 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/undercover_clone.git
+   git clone https://github.com/BlazheManev/undercover_clone
    cd undercover_clone
    ```
 
@@ -32,15 +32,16 @@ lib/
 ├── models/
 │   └── player.dart                # Player model (name, role, isAlive)
 ├── components/
-│   └── custom_button.dart         # Custom styled button used throughout the app
+│   ├── custom_button.dart         # Custom styled button used throughout the app
+│   └── player_avatar.dart         # Reusable avatar component for player initials
 ├── screens/
-│   └── setup/
-│       ├── setup_screen.dart      # Initial game setup screen
-│       ├── player_name_dialog.dart # Dialog for entering player names
-│  the game result
+│   ├── setup/
+│   │   ├── setup_screen.dart       # Initial game setup screen
+│   │   └── player_name_dialog.dart# Dialog for entering player names
 │   └── game/
-│       └── game_round_screen.dart # Main game logic with rounds, voting, audio
-        └── game_result_screen.dart # Final screen showing 
+│       ├── role_screen.dart        # Role reveal screen with countdown and audio
+│       ├── game_round_screen.dart  # Main game logic: voting, round handling
+│       └── game_result_screen.dart # Final result screen showing win state
 ```
 
 ---
