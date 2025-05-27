@@ -14,41 +14,44 @@ class HomeScreen extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             Image.asset('assets/images/background.png', fit: BoxFit.cover),
-            Container(color: Colors.black.withAlpha((0.4 * 255).toInt())),
+            Container(color: Colors.black.withOpacity(0.4)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
                 children: [
-                  Spacer(),
-                  Column(
-                    children: [
-                      Text(
-                        'UNDERCOVER CLONE',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 1.2,
+                  // Top-left title and subtitle
+                  SizedBox(height: 48),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'UNDERCOVER CLONE',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 1.2,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'A social deduction party game. Find the undercover!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                      ),
-                    ],
+                        SizedBox(height: 8),
+                        Text(
+                          'A social deduction party game.\nFind the undercover!',
+                          style: TextStyle(fontSize: 16, color: Colors.white70),
+                        ),
+                      ],
+                    ),
                   ),
-                  Spacer(),
+
+                  Spacer(), // Pushes the button to the bottom
+
                   CustomButton(
                     text: 'Set Up Game',
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => SetupScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => SetupScreen()),
                       );
                     },
                   ),
