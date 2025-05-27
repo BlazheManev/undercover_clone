@@ -32,21 +32,22 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
       round++;
     });
 
-    Future.delayed(Duration(seconds: 2), () {
-      _checkWinCondition();
-    });
+    _checkWinCondition();
   }
 
   void _checkWinCondition() {
     final alive = alivePlayers;
-    final undercovers =
-        alive.where((p) => p.role == PlayerRole.Undercover);
-    alive.where((p) => p.role == PlayerRole.Civilian);
+    final undercovers = alive
+        .where((p) => p.role == PlayerRole.Undercover)
+        .toList();
+    final civilians = alive
+        .where((p) => p.role == PlayerRole.Civilian)
+        .toList();
 
     if (undercovers.isEmpty) {
-      _endGame('Civilians win! All Undercover players eliminated.');
-    } else if (alive.length <= 2) {
-      _endGame('Undercover wins! Only 2 players remain.');
+      _endGame('🟢 Civilians win! All Undercover players eliminated.');
+    } else if (civilians.isEmpty || alive.length <= 2) {
+      _endGame('🔴 Undercover wins! Civilians are outnumbered.');
     }
   }
 
@@ -63,7 +64,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
               Navigator.popUntil(context, (route) => route.isFirst);
             },
             child: Text('Return to Home'),
-          )
+          ),
         ],
       ),
     );
@@ -97,7 +98,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         message,
-                        style: TextStyle(fontSize: 16, color: Colors.orangeAccent),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.orangeAccent,
+                        ),
                       ),
                     ),
                   Text(
@@ -111,7 +115,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                   SizedBox(height: 16),
                   ...alivePlayers.map(
                     (p) => RadioListTile<String>(
-                      title: Text(p.name, style: TextStyle(color: Colors.white)),
+                      title: Text(
+                        p.name,
+                        style: TextStyle(color: Colors.white),
+                      ),
                       value: p.name,
                       groupValue: _selectedName,
                       onChanged: (value) {
@@ -128,8 +135,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrange,
                       foregroundColor: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
                       textStyle: TextStyle(fontSize: 18),
                     ),
                     child: Text('Eliminate'),
