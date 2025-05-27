@@ -97,9 +97,8 @@ To run a specific file:
    ```
 Tests are written using flutter_test, mockito, and test for mocking logic and audio behavior.
 
-### ⚙️ New Section: `## 🚀 CI/CD with GitHub Actions`
+## 🚀 CI/CD with GitHub Actions
 
-```markdown
 ## 🚀 CI/CD with GitHub Actions
 
 All tests are automatically executed on:
@@ -120,5 +119,3 @@ The workflow installs dependencies and runs `flutter test` on Ubuntu without nee
 ## 🚀 Get Started & Enjoy!
 
 Build, play, and find the undercover! 🕵️‍♂️
-
----
