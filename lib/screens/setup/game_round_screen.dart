@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undercover_clone/screens/setup/game_result_screen.dart';
 import '../../../models/player.dart';
 
 class GameRoundScreen extends StatefulWidget {
@@ -45,27 +46,18 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
         .toList();
 
     if (undercovers.isEmpty) {
-      _endGame('🟢 Civilians win! All Undercover players eliminated.');
+      _endGame(false); // Civilians win
     } else if (civilians.isEmpty || alive.length <= 2) {
-      _endGame('🔴 Undercover wins! Civilians are outnumbered.');
+      _endGame(true); // Undercover wins
     }
   }
 
-  void _endGame(String result) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: Text('Game Over'),
-        content: Text(result),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            },
-            child: Text('Return to Home'),
-          ),
-        ],
+  void _endGame(bool undercoverWins) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            GameResultScreen(undercoverWins: undercoverWins),
       ),
     );
   }

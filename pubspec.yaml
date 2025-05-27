@@ -54,6 +54,8 @@ flutter:
   assets:
     - assets/images/background.png
     - assets/images/background_without_person.png
+    - assets/images/celebration_civilians.png
+    - assets/images/celebration_undercover.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
