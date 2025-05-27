@@ -67,16 +67,19 @@ assets/audio/
 ---
 
 ## 🖼️ Screenshots
-### 🔹 Home Screen
-![Home Screen](assets/screenshots/home.jpg)
+### 🔹 Home & Setup
 
-### 🔹 Setup Screen
-![Setup Screen](assets/screenshots/setup.jpg)
+<p float="left">
+  <img src="assets/screenshots/home.jpg" width="45%" />
+  <img src="assets/screenshots/setup.jpg" width="45%" />
+</p>
 
 ### 🔹 Gameplay
-![Gameplay](assets/screenshots/gameplay_one.jpg)
-![Gameplay](assets/screenshots/gameplay_two.jpg)
----
+
+<p float="left">
+  <img src="assets/screenshots/gameplay_one.jpg" width="45%" />
+  <img src="assets/screenshots/gameplay_two.jpg" width="45%" />
+</p>
 
 ## 📦 Features
 
