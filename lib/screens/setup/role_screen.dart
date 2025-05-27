@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import '../game/game_round_screen.dart';
 import '../../../models/player.dart';
-import '../../../components/player_avatar.dart'; // <-- Import the avatar component
+import '../../../components/player_avatar.dart';
 
 class RoleScreen extends StatefulWidget {
   final List<String> playerNames;
@@ -25,6 +25,7 @@ class _RoleScreenState extends State<RoleScreen> {
   bool wordRevealed = false;
   int countdown = 3;
   final AudioPlayer _audioPlayer = AudioPlayer();
+  Timer? _countdownTimer;
 
   final List<List<String>> wordPairs = [
     ['Cat', 'Tiger'],
@@ -73,7 +74,7 @@ class _RoleScreenState extends State<RoleScreen> {
 
     await _audioPlayer.play(AssetSource('audio/reveal.mp3'));
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (countdown > 1) {
         setState(() {
           countdown--;
@@ -86,6 +87,8 @@ class _RoleScreenState extends State<RoleScreen> {
   }
 
   void _nextPlayer() {
+    _countdownTimer?.cancel();
+
     if (currentPlayerIndex < widget.playerNames.length - 1) {
       setState(() {
         currentPlayerIndex++;
@@ -113,6 +116,7 @@ class _RoleScreenState extends State<RoleScreen> {
 
   @override
   void dispose() {
+    _countdownTimer?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -189,6 +193,11 @@ class _RoleScreenState extends State<RoleScreen> {
                         fontWeight: FontWeight.w500,
                         color: Colors.deepPurple,
                       ),
+                    ),
+                    SizedBox(height: 10),
+                    TextButton(
+                      onPressed: _nextPlayer,
+                      child: Text('Skip Countdown'),
                     ),
                   ],
                 ),

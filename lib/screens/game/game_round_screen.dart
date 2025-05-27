@@ -33,10 +33,9 @@ class _GameRoundScreenState extends State<GameRoundScreen>
       vsync: this,
       duration: Duration(milliseconds: 800),
     )..repeat(reverse: true);
-    _pulseAnimation = Tween(begin: 1.0, end: 1.07).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
+    _pulseAnimation = Tween(begin: 1.0, end: 1.07).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -83,7 +82,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     if (undercovers.isEmpty) {
       _playSound('win_civilians.mp3');
       _endGame(false);
-    } else if (civilians.isEmpty || alive.length <= 2) {
+    } else if (undercovers.length >= civilians.length) {
       _playSound('win_undercover.mp3');
       _endGame(true);
     }
@@ -260,9 +259,28 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     ),
                     SizedBox(height: 20),
                     showVoting
-                        ? CustomButton(
-                            text: 'Eliminate',
-                            onPressed: _eliminatePlayer,
+                        ? Column(
+                            children: [
+                              CustomButton(
+                                text: 'Eliminate',
+                                onPressed: _selectedName != null
+                                    ? _eliminatePlayer
+                                    : null,
+                              ),
+                              SizedBox(height: 12),
+                              CustomButton(
+                                text: 'Describe Again',
+                                onPressed: () {
+                                  setState(() {
+                                    showVoting = false;
+                                    _selectedName = null;
+                                    message =
+                                        '🔁 Restarted discussion. No one was eliminated.';
+                                  });
+                                  _playSound('reveal.mp3');
+                                },
+                              ),
+                            ],
                           )
                         : ScaleTransition(
                             scale: _pulseAnimation,
@@ -271,6 +289,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                               onPressed: () {
                                 setState(() {
                                   showVoting = true;
+                                  message = '';
                                 });
                                 _pulseController.stop();
                                 _playSound('start_voting.mp3');
