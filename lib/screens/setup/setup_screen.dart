@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../components/custom_button.dart';
+import 'package:undercover_clone/screens/setup/role_screen.dart';
+import '../../../components/custom_button.dart';
+import '../../../components/player_name_dialog.dart';
 
 class SetupScreen extends StatefulWidget {
   @override
@@ -127,7 +129,25 @@ class _SetupScreenState extends State<SetupScreen> {
                   CustomButton(
                     text: 'Continue',
                     onPressed: () {
-                      // Next screen logic here
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => PlayerNameDialog(
+                          totalPlayers: totalPlayers,
+                          onSubmit: (names) {
+                            Navigator.pop(context); // close dialog
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => RoleScreen(
+                                  playerNames: names,
+                                  undercoverCount: _undercoverCount,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
                     },
                   ),
                   SizedBox(height: 24),

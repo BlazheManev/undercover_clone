@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../components/custom_button.dart';
-import 'setup_screen.dart';
+import 'setup/setup_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
