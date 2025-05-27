@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'game_round_screen.dart';
+import '../../../models/player.dart';
 
 class RoleScreen extends StatefulWidget {
   final List<String> playerNames;
@@ -17,6 +19,7 @@ class RoleScreen extends StatefulWidget {
 class _RoleScreenState extends State<RoleScreen> {
   late List<Map<String, String>> assignedRoles;
   int currentPlayerIndex = 0;
+  bool wordRevealed = false;
 
   final List<List<String>> wordPairs = [
     ['Cat', 'Tiger'],
@@ -57,14 +60,35 @@ class _RoleScreenState extends State<RoleScreen> {
     return result;
   }
 
+  void _revealWord() {
+    setState(() {
+      wordRevealed = true;
+    });
+  }
+
   void _nextPlayer() {
     if (currentPlayerIndex < widget.playerNames.length - 1) {
       setState(() {
         currentPlayerIndex++;
+        wordRevealed = false;
       });
     } else {
-      // Game starts here
-      Navigator.pop(context); // or go to next game screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => GameRoundScreen(
+            players: assignedRoles.map((data) {
+              return Player(
+                name: data['name']!,
+                role: data['role'] == 'Undercover'
+                    ? PlayerRole.Undercover
+                    : PlayerRole.Civilian,
+                word: data['word']!,
+              );
+            }).toList(),
+          ),
+        ),
+      );
     }
   }
 
@@ -90,46 +114,52 @@ class _RoleScreenState extends State<RoleScreen> {
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
-              Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        current['role'] ?? '',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: current['role'] == 'Undercover'
-                              ? Colors.red
-                              : Colors.green,
+              if (!wordRevealed)
+                ElevatedButton(
+                  onPressed: _revealWord,
+                  child: Text('Tap to Reveal Your Word'),
+                )
+              else
+                Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          current['word'] ?? '',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepPurple,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        current['word'] ?? '',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black87,
+                        SizedBox(height: 12),
+                        Text(
+                          '(Keep it secret!)',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: _nextPlayer,
-                child: Text(
-                  currentPlayerIndex == widget.playerNames.length - 1
-                      ? 'Finish'
-                      : 'Next',
-                ),
-              )
+              if (wordRevealed)
+                ElevatedButton(
+                  onPressed: _nextPlayer,
+                  child: Text(
+                    currentPlayerIndex == widget.playerNames.length - 1
+                        ? 'Start Game'
+                        : 'Next',
+                  ),
+                )
             ],
           ),
         ),
