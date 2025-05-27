@@ -99,8 +99,6 @@ Tests are written using flutter_test, mockito, and test for mocking logic and au
 
 ## 🚀 CI/CD with GitHub Actions
 
-## 🚀 CI/CD with GitHub Actions
-
 All tests are automatically executed on:
 - ✅ Pushes to `main`
 - ✅ Pull requests to `main`
