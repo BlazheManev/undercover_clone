@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'game_round_screen.dart';
+import '../game/game_round_screen.dart';
 import '../../../models/player.dart';
 
 class RoleScreen extends StatefulWidget {

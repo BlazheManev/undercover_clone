@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:Undercover/screens/setup/game_result_screen.dart';
+import 'package:Undercover/screens/game/game_result_screen.dart';
 import '../../../models/player.dart';
 import '../../../components/custom_button.dart';
 
