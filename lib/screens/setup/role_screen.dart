@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:async'; // Required for Timer
+import 'package:audioplayers/audioplayers.dart';
 import '../game/game_round_screen.dart';
 import '../../../models/player.dart';
 
@@ -20,6 +22,8 @@ class _RoleScreenState extends State<RoleScreen> {
   late List<Map<String, String>> assignedRoles;
   int currentPlayerIndex = 0;
   bool wordRevealed = false;
+  int countdown = 3;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   final List<List<String>> wordPairs = [
     ['Cat', 'Tiger'],
@@ -60,9 +64,23 @@ class _RoleScreenState extends State<RoleScreen> {
     return result;
   }
 
-  void _revealWord() {
+  void _revealWord() async {
     setState(() {
       wordRevealed = true;
+      countdown = 3;
+    });
+
+    await _audioPlayer.play(AssetSource('audio/reveal.mp3'));
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (countdown > 1) {
+        setState(() {
+          countdown--;
+        });
+      } else {
+        timer.cancel();
+        _nextPlayer();
+      }
     });
   }
 
@@ -93,6 +111,12 @@ class _RoleScreenState extends State<RoleScreen> {
   }
 
   @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final current = assignedRoles[currentPlayerIndex];
 
@@ -120,46 +144,51 @@ class _RoleScreenState extends State<RoleScreen> {
                   child: Text('Tap to Reveal Your Word'),
                 )
               else
-                Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          current['word'] ?? '',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepPurple,
-                          ),
+                Column(
+                  children: [
+                    Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              current['word'] ?? '',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              '(Keep it secret!)',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 12),
-                        Text(
-                          '(Keep it secret!)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                    Text(
+                      currentPlayerIndex == widget.playerNames.length - 1
+                          ? 'Starting the game in $countdown...'
+                          : 'Next player in $countdown...',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.deepPurple,
+                      ),
+                    ),
+                  ],
                 ),
-              SizedBox(height: 40),
-              if (wordRevealed)
-                ElevatedButton(
-                  onPressed: _nextPlayer,
-                  child: Text(
-                    currentPlayerIndex == widget.playerNames.length - 1
-                        ? 'Start Game'
-                        : 'Next',
-                  ),
-                )
             ],
           ),
         ),
